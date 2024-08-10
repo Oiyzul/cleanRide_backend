@@ -10,8 +10,10 @@ export const userValidationSchema = z.object({
   phone: z.string().regex(/^[0-9]{10,11}$/, {
     message: "Phone number must be between 10 to 11 digits",
   }),
-  role: z.nativeEnum(User_roles, {
-    message: "Role must be either 'admin' or 'user'",
-  }),
+  role: z
+    .nativeEnum(User_roles, {
+      message: "Role must be either 'admin' or 'user'",
+    })
+    .default(User_roles.user),
   address: z.string().min(1, { message: "Address is required" }),
 });
