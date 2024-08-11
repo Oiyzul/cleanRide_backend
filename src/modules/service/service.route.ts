@@ -6,7 +6,9 @@ import { User_roles } from "../user/user.constant";
 const router = Router();
 
 router.post("/", auth(User_roles.admin), ServiceControllers.createService);
-router.get("/:serviceId",  ServiceControllers.getSingleService);
-router.get("/",  ServiceControllers.getAllServices);
+router.get("/:id", ServiceControllers.getSingleService);
+router.put("/:id", auth(User_roles.admin), ServiceControllers.updateService);
+router.get("/", ServiceControllers.getAllServices);
+router.delete("/:id", auth(User_roles.admin), ServiceControllers.deleteService);
 
 export const ServiceRoutes = router;

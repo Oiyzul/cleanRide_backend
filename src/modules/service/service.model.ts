@@ -31,6 +31,20 @@ const serviceSchema = new mongoose.Schema<TService>(
   { timestamps: true }
 );
 
+serviceSchema.pre('find', async function (next) {
+  this.find({ isDeleted: false });
+  next();
+})
+serviceSchema.pre('findOne', async function (next) {
+  this.find({ isDeleted: false });
+  next();
+})
+
+serviceSchema.pre('findOneAndUpdate', async function (next) {
+  this.find({ isDeleted: false });
+  next();
+})
+
 serviceSchema.set("toJSON", {
   transform: (doc, { __v, ...rest }) => rest,
 });
