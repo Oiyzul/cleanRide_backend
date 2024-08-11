@@ -20,7 +20,7 @@ const signup = catchAsync(async (req, res) => {
 const login = catchAsync(async (req, res) => {
   try {
     const result = await UserServices.loginIntoDB(req.body);
-    console.log(result)
+    
     res.status(200).json({
         success: true,
         statusCode: 200,
