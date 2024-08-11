@@ -2,9 +2,9 @@ import mongoose, { model } from "mongoose";
 import bcrypt from "bcryptjs"; // For password hashing
 import { User_roles } from "./user.constant";
 import Env from "../../config";
-import { TUser } from "./user.interface";
+import { TUser, UserModel } from "./user.interface";
 
-const userSchema = new mongoose.Schema<TUser>(
+const userSchema = new mongoose.Schema<TUser, UserModel>(
   {
     name: {
       type: String,
@@ -30,7 +30,6 @@ const userSchema = new mongoose.Schema<TUser>(
     phone: {
       type: String,
       required: true,
-      unique: true,
       match: /^[0-9]{10,11}$/,
     },
     role: {

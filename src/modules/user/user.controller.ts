@@ -17,6 +17,24 @@ const signup = catchAsync(async (req, res) => {
   }
 });
 
+const login = catchAsync(async (req, res) => {
+  try {
+    const result = await UserServices.loginIntoDB(req.body);
+    console.log(result)
+    res.status(200).json({
+        success: true,
+        statusCode: 200,
+        message: "User logged in successfully",
+        token: result?.accessToken,
+        data: result?.user,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 export const UserControllers = {
   signup,
+  login
 };
