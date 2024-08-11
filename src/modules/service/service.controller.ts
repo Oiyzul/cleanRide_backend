@@ -32,29 +32,43 @@ const getAllServices = catchAsync(async (req, res) => {
 });
 
 const updateService = catchAsync(async (req, res) => {
-    const result = await ServiceServices.updateServiceIntoDB(req.params.id, req.body);
-    res.status(200).json({
-      success: true,
-      statusCode: 200,
-      message: "Service updated successfully",
-      data: result,
-    });
+  const result = await ServiceServices.updateServiceIntoDB(
+    req.params.id,
+    req.body
+  );
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Service updated successfully",
+    data: result,
   });
+});
 
 const deleteService = catchAsync(async (req, res) => {
-    const result = await ServiceServices.deleteServiceFromDB(req.params.id);
-    res.status(200).json({
-      success: true,
-      statusCode: 200,
-      message: "Service deleted successfully",
-      data: result,
-    });
+  const result = await ServiceServices.deleteServiceFromDB(req.params.id);
+  res.status(200).json({
+    success: true,
+    statusCode: 200,
+    message: "Service deleted successfully",
+    data: result,
   });
+});
+
+const createSlot = catchAsync(async (req, res) => {
+  const result = await ServiceServices.saveSlotIntoDB(req.body);
+  res.status(201).json({
+    success: true,
+    statusCode: 201,
+    message: "Slots created successfully",
+    data: result,
+  });
+});
 
 export const ServiceControllers = {
   createService,
   getSingleService,
   getAllServices,
   updateService,
-  deleteService
+  deleteService,
+  createSlot,
 };

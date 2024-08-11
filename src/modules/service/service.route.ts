@@ -10,5 +10,6 @@ router.get("/:id", ServiceControllers.getSingleService);
 router.put("/:id", auth(User_roles.admin), ServiceControllers.updateService);
 router.get("/", ServiceControllers.getAllServices);
 router.delete("/:id", auth(User_roles.admin), ServiceControllers.deleteService);
+router.post('/slots', auth(User_roles.admin), ServiceControllers.createSlot)
 
 export const ServiceRoutes = router;
