@@ -9,6 +9,18 @@ const saveServiceIntoDB = async (payload: TService) => {
   return result;
 };
 
+const getSingleServiceFromDB = async (payload: string) => {
+  const result = await Service.findById(payload);
+  return result;
+};
+
+const getAllServiceFromDB = async () => {
+  const result = await Service.find();
+  return result;
+};
+
 export const ServiceServices = {
   saveServiceIntoDB,
+  getSingleServiceFromDB,
+  getAllServiceFromDB
 };
