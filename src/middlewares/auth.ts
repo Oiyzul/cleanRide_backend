@@ -27,7 +27,7 @@ export const auth = (...requiredRoles: (keyof typeof User_roles)[]) => {
     }
 
     if (!requiredRoles.includes(role)) {
-      throw new Error("Only admin can create services");
+      throw new Error("Unauthorized access");
     }
     
     next();

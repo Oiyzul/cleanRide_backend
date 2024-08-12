@@ -5,6 +5,7 @@ import { User } from "../user/user.model";
 import { TService } from "./service.interface";
 import { Service } from "./service.model";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { generateSlots } from "./service.utils";
 
 const saveServiceIntoDB = async (payload: TService) => {
   const result = await Service.create(payload);
@@ -39,65 +40,28 @@ const deleteServiceFromDB = async (id: string) => {
   return result;
 };
 
-// Helper function to convert time string to minutes
-function timeToMinutes(timeString: string) {
-  const [hours, minutes] = timeString.split(":").map(Number);
-  return hours * 60 + minutes;
-}
+const saveSlotIntoDB = async (payload: TSlot) => {
+  const { service, startTime, endTime, date } = payload;
 
-// Helper function to convert minutes back to time string
-function minutesToTime(minutes: number) {
-  const hours = Math.floor(minutes / 60);
-  const minutesPart = minutes % 60;
-  return `${String(hours).padStart(2, "0")}:${String(minutesPart).padStart(
-    2,
-    "0"
-  )}`;
-}
-
-function generateSlots(
-  startTime: string,
-  endTime: string,
-  serviceDuration: number
-) {
-  const startMinutes = timeToMinutes(startTime);
-  const endMinutes = timeToMinutes(endTime);
-  const totalDuration = endMinutes - startMinutes;
-
-  const numberOfSlots = Math.floor(totalDuration / serviceDuration);
-
-  const slots = [];
-  for (let i = 0; i < numberOfSlots; i++) {
-    const slotStartTime = startMinutes + i * serviceDuration;
-    const slotEndTime = slotStartTime + serviceDuration;
-    slots.push({
-      startTime: minutesToTime(slotStartTime),
-      endTime: minutesToTime(slotEndTime),
-    });
+  const savedService = await Service.findById(service);
+  if (!savedService) {
+    throw new Error("Service not found");
   }
 
-  return slots;
-}
+  // Validate slot availability and duration with service duration
+  const slots = generateSlots(startTime, endTime, savedService?.duration);
+  
+  // Create slot
+  const possibleSlots = slots.map((slot) => ({
+    service: service,
+    date: date,
+    startTime: slot.startTime,
+    endTime: slot.endTime,
+    isBooked: payload?.isBooked,
+  }));
 
-const saveSlotIntoDB = async (payload: TSlot) => {
-  const { startTime, endTime, date } = payload;
-  const serviceDuration = 60;
-
-  const slots = generateSlots(startTime, endTime, serviceDuration);
-  console.log(slots);
-
-
-// Create slot documents
-const slotDocuments = slots.map(slot => ({
-  service: payload.service,
-  date: payload.date,
-  startTime: slot.startTime,
-  endTime: slot.endTime,
-  isBooked: payload?.isBooked
-}));
-
-const createdSlots = await Slot.insertMany(slotDocuments);
-  return createdSlots
+  const createdSlots = await Slot.insertMany(possibleSlots);
+  return createdSlots;
 };
 
 export const ServiceServices = {

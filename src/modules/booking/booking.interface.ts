@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { Vehicle_types } from "./booking.constant";
 
-export type Booking = {
+export type TBooking = {
   customer: Types.ObjectId;
   service: Types.ObjectId;
   slot: Types.ObjectId;
@@ -11,3 +11,14 @@ export type Booking = {
   manufacturingYear: number;
   registrationPlate: string;
 };
+
+export type TBookingPayload = {
+  customer: Types.ObjectId;
+  serviceId: Types.ObjectId;
+  slotId: Types.ObjectId;
+  vehicleType: keyof typeof Vehicle_types;
+  vehicleBrand: string;
+  vehicleModel: string;
+  manufacturingYear: number;
+  registrationPlate: string;
+}
