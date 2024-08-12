@@ -45,12 +45,12 @@ const saveSlotIntoDB = async (payload: TSlot) => {
 
   const savedService = await Service.findById(service);
   if (!savedService) {
-    throw new Error("Service not found");
+    throw new Error("Service not found: " + service);
   }
 
   // Validate slot availability and duration with service duration
   const slots = generateSlots(startTime, endTime, savedService?.duration);
-  
+
   // Create slot
   const possibleSlots = slots.map((slot) => ({
     service: service,

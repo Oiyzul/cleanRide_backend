@@ -19,17 +19,19 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
     manufacturingYear,
     registrationPlate,
   } = payload;
-  
 
   const decodedToken = decodeJWT(token);
 
   const customer = await User.findOne({ email: decodedToken?.email });
-  console.log(customer);
+
   const service = await Service.findById(serviceId);
-  console.log("service", service);
+  if (!service) {
+    throw new Error("Service not found: " + serviceId);
+  }
+
   const slot = await Slot.findById(slotId);
-  console.log("slot", slot);
-  if (!slot || slot.isBooked) {
+
+  if (!slot || slot.isBooked === "booked") {
     // return response.status(400).json({
     //   success: false,
     //   statusCode: 400,
@@ -39,6 +41,7 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
   }
   //TODO: Update slot status to booked using transaction and rollback
   slot.isBooked = "booked";
+
   await slot.save();
 
   const modifiedPayload = {
