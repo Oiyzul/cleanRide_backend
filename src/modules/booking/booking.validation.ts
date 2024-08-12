@@ -1,15 +1,14 @@
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { z } from "zod";
 import { Vehicle_types } from "./booking.constant";
 
-export const bookingValidationSchema = z.object({
-  customer: z.instanceof(Types.ObjectId, {
-    message: "Invalid customer reference",
+const createBookingValidationSchema = z.object({
+  serviceId: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid ObjectId",
   }),
-  service: z.instanceof(Types.ObjectId, {
-    message: "Invalid service reference",
+  slotId: z.string().refine((val) => mongoose.Types.ObjectId.isValid(val), {
+    message: "Invalid ObjectId",
   }),
-  slot: z.instanceof(Types.ObjectId, { message: "Invalid slot reference" }),
   vehicleType: z.nativeEnum(Vehicle_types, { message: "Invalid vehicle type" }),
   vehicleBrand: z.string().nonempty({ message: "Vehicle brand is required" }),
   vehicleModel: z.string().nonempty({ message: "Vehicle model is required" }),
@@ -20,3 +19,7 @@ export const bookingValidationSchema = z.object({
     .string()
     .nonempty({ message: "Registration plate is required" }),
 });
+
+export const BookingValidations = {
+  createBookingValidationSchema
+}

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { User_roles } from "./user.constant";
 
-export const userValidationSchema = z.object({
+const createUserValidationSchema = z.object({
   name: z.string().min(1, { message: "Name is required" }),
   email: z.string().email({ message: "Invalid email address" }),
   password: z
@@ -17,3 +17,15 @@ export const userValidationSchema = z.object({
     .default(User_roles.user),
   address: z.string().min(1, { message: "Address is required" }),
 });
+
+const loginValidaitonSchema = z.object({
+  email: z.string({required_error: 'Email is required.'}).email({ message: "Invalid email address" }),
+  password: z
+    .string()
+    .min(4, { message: "Password must be at least 4 characters" }),
+});
+
+export const UserValidations = {
+  createUserValidationSchema,
+  loginValidaitonSchema,
+};
