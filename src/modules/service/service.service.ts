@@ -42,7 +42,11 @@ const deleteServiceFromDB = async (id: string) => {
 
     await Slot.deleteMany({ service: id });
 
-    const result = await Service.findByIdAndDelete(id, { new: true });
+    const result = await Service.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true }
+    );
 
     await session.commitTransaction();
     await session.endSession();
