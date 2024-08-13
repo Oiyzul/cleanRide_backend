@@ -1,8 +1,8 @@
-import mongoose, { Types } from "mongoose";
 import { Slot } from "./slot.model";
 
-const getAvailableSlotsFromDB = async (query: Record<string, string>) => {
+const getAvailableSlotsFromDB = async (query: any) => {
   const { serviceId, date } = query;
+
   const queryObject: any = {};
   if (date) {
     queryObject.date = date;

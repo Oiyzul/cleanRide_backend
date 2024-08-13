@@ -1,18 +1,17 @@
 import { catchAsync } from "../../utils/catchAsync";
+import sendRes from "../../utils/sendRes";
 import { SlotServices } from "./slot.service";
 
-const getAvailableSlots = catchAsync(async (req, res)=> {
-    console.log(req.query)
-const result = await SlotServices.getAvailableSlotsFromDB(req?.query)
+const getAvailableSlots = catchAsync(async (req, res) => {
+  const result = await SlotServices.getAvailableSlotsFromDB(req?.query);
 
-res.status(200).json({
-    success: true,
-    statusCode: 200,
+  sendRes({
+    res,
     message: "Available slots retrieved successfully",
     data: result,
- });
-})
+  });
+});
 
 export const SlotControllers = {
-    getAvailableSlots
-}
+  getAvailableSlots,
+};

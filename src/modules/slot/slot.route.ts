@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { SlotControllers } from "./slot.controller";
 
-const router = Router()
+const router = Router();
 
-router.get('/availability', SlotControllers.getAvailableSlots)
+router.get(
+  "/availability", SlotControllers.getAvailableSlots
+);
 
-export const SlotRoutes = router
+export const SlotRoutes = router;

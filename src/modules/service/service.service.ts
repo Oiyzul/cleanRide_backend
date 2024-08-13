@@ -1,24 +1,26 @@
-import Env from "../../config";
+import { Response } from "express";
+import AppError from "../../errors/AppError";
 import { TSlot } from "../slot/slot.interface";
 import { Slot } from "../slot/slot.model";
-import { User } from "../user/user.model";
 import { TService } from "./service.interface";
 import { Service } from "./service.model";
-import jwt, { JwtPayload } from "jsonwebtoken";
 import { generateSlots } from "./service.utils";
 
 const saveServiceIntoDB = async (payload: TService) => {
   const result = await Service.create(payload);
+  
   return result;
 };
 
-const getSingleServiceFromDB = async (payload: string) => {
+const getSingleServiceFromDB = async (payload: string, res: Response) => {
   const result = await Service.findById(payload);
+
   return result;
 };
 
-const getAllServiceFromDB = async () => {
+const getAllServiceFromDB = async (res: Response) => {
   const result = await Service.find();
+  
   return result;
 };
 
@@ -26,6 +28,7 @@ const updateServiceIntoDB = async (id: string, payload: Partial<TService>) => {
   const result = await Service.findByIdAndUpdate(id, payload, {
     new: true,
   });
+  
   return result;
 };
 
@@ -37,19 +40,36 @@ const deleteServiceFromDB = async (id: string) => {
     },
     { new: true }
   );
+  
   return result;
 };
 
-const saveSlotIntoDB = async (payload: TSlot) => {
+const saveSlotIntoDB = async (payload: TSlot, res: Response) => {
   const { service, startTime, endTime, date } = payload;
 
   const savedService = await Service.findById(service);
   if (!savedService) {
-    throw new Error("Service not found: " + service);
+    throw new AppError(400, "Service not found: " + service);
   }
 
-  // Validate slot availability and duration with service duration
-  const slots = generateSlots(startTime, endTime, savedService?.duration);
+  // Validate slot availability and duration
+  const availableSlots = await Slot.find({
+    service,
+    date,
+    startTime: { $gte: startTime, $lte: endTime },
+    endTime: { $gte: startTime, $lte: endTime },
+    isBooked: "available",
+  })
+
+  if (availableSlots.length !== 0) {
+    throw new AppError(400, "Slot is not available");
+  }
+  
+  const slots = generateSlots(
+    startTime,
+    endTime,
+    savedService?.duration as number
+  );
 
   // Create slot
   const possibleSlots = slots.map((slot) => ({
@@ -61,6 +81,7 @@ const saveSlotIntoDB = async (payload: TSlot) => {
   }));
 
   const createdSlots = await Slot.insertMany(possibleSlots);
+
   return createdSlots;
 };
 

@@ -1,25 +1,29 @@
 import Env from "../../config";
+import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { isPasswordMatched } from "./user.utils";
 import jwt from "jsonwebtoken";
 
 const signupIntoDB = async (payload: TUser) => {
-    const user = await User.findOne({ email: payload?.email });
+  const user = await User.findOne({ email: payload?.email });
 
-    if (user) {
-      throw new Error("User already exists");
-    }
+  if (user) {
+    throw new AppError(400, "User already exists");
+  }
+
   const result = await User.create(payload);
 
   return result;
 };
 
 const loginIntoDB = async (payload: TUser) => {
-  const user = await User.findOne({ email: payload?.email }).select('+password');
+  const user = await User.findOne({ email: payload?.email }).select(
+    "+password"
+  );
 
   if (!user) {
-    throw new Error("User not found");
+    throw new AppError(400, "User not found");
   }
 
   const passwordMatched = await isPasswordMatched(
@@ -28,21 +32,22 @@ const loginIntoDB = async (payload: TUser) => {
   );
 
   if (!passwordMatched) {
-    throw new Error("Invalid password");
+    throw new AppError(400, "Invalid password");
   }
 
   const jwtPayload = {
     email: user.email,
-    role: user.role
+    role: user.role,
   };
 
   const accessToken = jwt.sign(jwtPayload, Env.jwt_access_secret as string, {
-    expiresIn: Env.jwt_access_expires_in
-  })
+    expiresIn: Env.jwt_access_expires_in,
+  });
 
   return {
-    accessToken, user
-  }
+    accessToken,
+    user,
+  };
 };
 
 export const UserServices = {
