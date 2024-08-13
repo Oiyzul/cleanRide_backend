@@ -5,10 +5,11 @@ import { Slot } from "../slot/slot.model";
 import { TService } from "./service.interface";
 import { Service } from "./service.model";
 import { generateSlots } from "./service.utils";
+import mongoose from "mongoose";
 
 const saveServiceIntoDB = async (payload: TService) => {
   const result = await Service.create(payload);
-  
+
   return result;
 };
 
@@ -20,7 +21,7 @@ const getSingleServiceFromDB = async (payload: string, res: Response) => {
 
 const getAllServiceFromDB = async (res: Response) => {
   const result = await Service.find();
-  
+
   return result;
 };
 
@@ -28,20 +29,31 @@ const updateServiceIntoDB = async (id: string, payload: Partial<TService>) => {
   const result = await Service.findByIdAndUpdate(id, payload, {
     new: true,
   });
-  
+
   return result;
 };
 
 const deleteServiceFromDB = async (id: string) => {
-  const result = await Service.findByIdAndUpdate(
-    id,
-    {
-      isDeleted: true,
-    },
-    { new: true }
-  );
-  
-  return result;
+  //TODO: delete slots associated with the service
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    await Slot.deleteMany({ service: id });
+
+    const result = await Service.findByIdAndDelete(id, { new: true });
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return result;
+  } catch (err: any) {
+    console.log(err);
+    await session.endSession();
+    await session.abortTransaction();
+    throw new Error(err);
+  }
 };
 
 const saveSlotIntoDB = async (payload: TSlot, res: Response) => {
@@ -59,12 +71,12 @@ const saveSlotIntoDB = async (payload: TSlot, res: Response) => {
     startTime: { $gte: startTime, $lte: endTime },
     endTime: { $gte: startTime, $lte: endTime },
     isBooked: "available",
-  })
+  });
 
   if (availableSlots.length !== 0) {
     throw new AppError(400, "Slot is not available");
   }
-  
+
   const slots = generateSlots(
     startTime,
     endTime,

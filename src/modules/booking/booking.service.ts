@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import AppError from "../../errors/AppError";
 import { decodeJWT } from "../../utils/decodeJWT";
 import { Service } from "../service/service.model";
@@ -31,7 +32,7 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
   }
 
   const slot = await Slot.findById(slotId);
-  
+
   if (!slot) {
     throw new AppError(400, "Slot does not exist");
   }
@@ -46,32 +47,44 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
     service: service._id,
     slot: slot._id,
   });
-  
+
   if (myBookings.length > 0) {
     throw new AppError(400, "You have already booked the service in this slot");
   }
 
   //TODO: Update slot status to booked using transaction and rollback
+  const session = await mongoose.startSession();
 
-  slot.isBooked = "booked";
+  try {
+    session.startTransaction();
+    slot.isBooked = "booked";
 
-  await slot.save();
+    await slot.save();
 
-  const modifiedPayload = {
-    customer: customer?._id,
-    service: serviceId,
-    slot: slotId,
-    vehicleType: vehicleType,
-    vehicleBrand: vehicleBrand,
-    vehicleModel: vehicleModel,
-    manufacturingYear: manufacturingYear,
-    registrationPlate: registrationPlate,
-  };
+    const modifiedPayload = {
+      customer: customer?._id,
+      service: serviceId,
+      slot: slotId,
+      vehicleType: vehicleType,
+      vehicleBrand: vehicleBrand,
+      vehicleModel: vehicleModel,
+      manufacturingYear: manufacturingYear,
+      registrationPlate: registrationPlate,
+    };
 
-  const result = (await Booking.create(modifiedPayload)).populate(
-    "customer service slot"
-  );
-  return result;
+    const result = (await Booking.create(modifiedPayload)).populate(
+      "customer service slot"
+    );
+
+    await session.commitTransaction();
+    await session.endSession();
+
+    return result;
+  } catch (err:any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(err);
+  }
 };
 
 const getAllBookingsFromDB = async () => {

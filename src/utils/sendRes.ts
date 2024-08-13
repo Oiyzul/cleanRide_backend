@@ -4,7 +4,7 @@ type TResponse = {
   res: Response;
   message: string;
   token?: string;
-  data: [] | {};
+  data: [] | {} | null;
 };
 
 const sendRes = (resData: TResponse) => {
@@ -15,7 +15,7 @@ const sendRes = (resData: TResponse) => {
   if (isArray) {
     isData = data.length > 0 ? true : false;
   } else {
-    isData = Object.keys(data).length > 0 ? true : false;
+    isData = Object.keys(data as object).length > 0 ? true : false;
   }
 
   const statusCode = isData ? 200 : 404;
