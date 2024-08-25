@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import router from './routes';
 import notFound from './middlewares/notFound';
 import globalErrorHandler from './middlewares/globalErrorHandler';
@@ -6,6 +7,7 @@ import globalErrorHandler from './middlewares/globalErrorHandler';
 const app = express();
 
 // Middleware to parse JSON request bodies
+app.use(cors())
 app.use(express.json())
 
 // Routes
