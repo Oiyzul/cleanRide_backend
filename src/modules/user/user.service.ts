@@ -36,6 +36,7 @@ const loginIntoDB = async (payload: TUser) => {
   }
 
   const jwtPayload = {
+    name: user.name,
     email: user.email,
     role: user.role,
   };

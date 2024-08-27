@@ -12,6 +12,18 @@ const getAvailableSlots = catchAsync(async (req, res) => {
   });
 });
 
+const updateSlot = catchAsync(async (req, res) => {
+  const { slotId } = req.params;
+  const result = await SlotServices.updateSlotIntoDB(slotId);
+
+  sendRes({
+    res,
+    message: "Slot is updated successfully",
+    data: result,
+  });
+});
+
 export const SlotControllers = {
   getAvailableSlots,
+  updateSlot,
 };

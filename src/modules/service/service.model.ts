@@ -22,6 +22,9 @@ const serviceSchema = new mongoose.Schema<TService>(
       required: true,
       min: 1,
     },
+    imgUrl: {
+      type: String
+    },
     isDeleted: {
       type: Boolean,
       default: false,

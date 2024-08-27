@@ -7,4 +7,8 @@ router.get(
   "/availability", SlotControllers.getAvailableSlots
 );
 
+router.patch(
+  "/update-slot/:slotId", SlotControllers.updateSlot
+);
+
 export const SlotRoutes = router;

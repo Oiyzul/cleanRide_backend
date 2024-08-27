@@ -25,7 +25,7 @@ const sendRes = (resData: TResponse) => {
     success: isData ? true : false,
     statusCode,
     message: isData ? message : "No data found",
-    ...(resData.token && { toekn: resData.token }),
+    ...(resData.token && { token: resData.token }),
     ...(resData.data && { data: resData.data }),
   });
 };

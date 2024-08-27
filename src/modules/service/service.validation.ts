@@ -9,6 +9,9 @@ const createServiceValidationSchema = z.object({
   duration: z
     .number()
     .positive({ message: "Duration must be a positive number" }),
+    imgUrl: z
+    .string()
+    .min(10, { message: "Invalid imgUrl" }).optional(),
   isDeleted: z.boolean().default(false),
 });
 
