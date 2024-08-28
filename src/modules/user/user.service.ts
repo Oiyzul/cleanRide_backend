@@ -51,7 +51,21 @@ const loginIntoDB = async (payload: TUser) => {
   };
 };
 
+const getAllUsersFromDB = async () => {
+  const users = await User.find({});
+  
+  return users;
+};
+
+const updateUserIntoDB = async (id: string, userData: Partial<TUser>) => {
+  const user = await User.findByIdAndUpdate(id, userData, { new: true });
+  console.log(user);
+  return user;
+};
+
 export const UserServices = {
   signupIntoDB,
   loginIntoDB,
+  getAllUsersFromDB,
+  updateUserIntoDB,
 };

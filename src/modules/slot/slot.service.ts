@@ -1,4 +1,5 @@
 import AppError from "../../errors/AppError";
+import { TSlot } from "./slot.interface";
 import { Slot } from "./slot.model";
 
 const getAvailableSlotsFromDB = async (query: any) => {
@@ -18,20 +19,19 @@ const getAvailableSlotsFromDB = async (query: any) => {
   return result;
 };
 
-const updateSlotIntoDB = async (id: string) => {
+const updateSlotIntoDB = async (id: string, slotData: Partial<TSlot>) => {
   const slot = await Slot.findById(id);
-
+  console.log(slotData);
   if (!slot) {
     throw new AppError(404, "Slot not found");
   }
 
-  slot.isBooked = "booked";
-  await slot.save();
-  
-  return slot;
+  const updatedSlot = await Slot.findByIdAndUpdate(id, slotData, { new: true });
+
+  return updatedSlot;
 };
 
 export const SlotServices = {
   getAvailableSlotsFromDB,
-  updateSlotIntoDB
+  updateSlotIntoDB,
 };

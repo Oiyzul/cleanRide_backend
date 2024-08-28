@@ -7,7 +7,7 @@ router.get(
   "/availability", SlotControllers.getAvailableSlots
 );
 
-router.patch(
+router.put(
   "/update-slot/:slotId", SlotControllers.updateSlot
 );
 

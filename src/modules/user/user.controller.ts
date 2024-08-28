@@ -23,7 +23,30 @@ const login = catchAsync(async (req, res) => {
   });
 });
 
+const getAllUsers = catchAsync(async (req, res) => {
+  const result = await UserServices.getAllUsersFromDB();
+
+  sendRes({
+    res,
+    message: "Users retrieved successfully",
+    data: result,
+  });
+});
+
+const updateUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const result = await UserServices.updateUserIntoDB(userId, req.body);
+
+  sendRes({
+    res,
+    message: "Users updated successfully",
+    data: result,
+  });
+});
+
 export const UserControllers = {
   signup,
   login,
+  getAllUsers,
+  updateUser,
 };
