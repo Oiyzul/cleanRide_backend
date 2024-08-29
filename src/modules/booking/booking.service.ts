@@ -89,11 +89,11 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
       customerPhone: customer?.phone,
       customerAddress: customer?.address,
       startTime: slot?.startTime,
-      serviceName: service?.name
+      serviceName: service?.name,
     };
 
     const paymentSession = await initiatePayment(paymentData);
-  
+
     await session.commitTransaction();
     await session.endSession();
 
@@ -110,7 +110,31 @@ const getAllBookingsFromDB = async () => {
   return result;
 };
 
+const getSingleUserBookingsFromDB = async (customerId: string) => {
+  const customer = await User.findOne({ _id: customerId });
+
+  if (!customer) {
+    throw new AppError(404, "User not found");
+  }
+
+  const result = await Booking.find({
+    customer: customerId,
+  }).populate("customer service slot");
+
+  return result;
+};
+
+const getSingleBookingFromDB = async (bookingId: string) => {
+  const result = await Booking.findOne({
+    _id: bookingId,
+  }).populate("customer service slot");
+
+  return result;
+};
+
 export const BookingServices = {
   bookServiceIntoDB,
   getAllBookingsFromDB,
+  getSingleUserBookingsFromDB,
+  getSingleBookingFromDB,
 };

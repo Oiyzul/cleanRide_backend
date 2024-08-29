@@ -16,7 +16,7 @@ const bookService = catchAsync(async (req, res) => {
   });
 });
 
-const getAllBookins = catchAsync(async (req, res) => {
+const getAllBookings = catchAsync(async (req, res) => {
   const result = await BookingServices.getAllBookingsFromDB();
 
   sendRes({
@@ -26,7 +26,33 @@ const getAllBookins = catchAsync(async (req, res) => {
   });
 });
 
+const getSingleUserBookings = catchAsync(async (req, res) => {
+  const { customerId } = req.params;
+
+  const result = await BookingServices.getSingleUserBookingsFromDB(customerId);
+
+  sendRes({
+    res,
+    message: "All bookings retrieved successfully for this customer.",
+    data: result,
+  });
+});
+
+const getSingleBooking = catchAsync(async (req, res) => {
+  const { bookingId } = req.params;
+
+  const result = await BookingServices.getSingleBookingFromDB(bookingId);
+
+  sendRes({
+    res,
+    message: "Booking retrieved successfully.",
+    data: result,
+  });
+});
+
 export const BookingControllers = {
   bookService,
-  getAllBookins,
+  getAllBookings,
+  getSingleUserBookings,
+  getSingleBooking
 };

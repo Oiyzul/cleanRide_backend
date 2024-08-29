@@ -16,9 +16,22 @@ router.post(
 );
 
 router.get(
+  "/:customerId",
+  authenticateRoute(User_roles.admin, User_roles.user),
+  BookingControllers.getSingleUserBookings
+);
+
+router.get(
+  "/:bookingId",
+  authenticateRoute(User_roles.admin, User_roles.user),
+  BookingControllers.getSingleBooking)
+  
+router.get(
   "/",
   authenticateRoute(User_roles.admin),
-  BookingControllers.getAllBookins
+  BookingControllers.getAllBookings
 );
+
+
 
 export const BookingRoutes = router;
