@@ -15,6 +15,9 @@ const bookingSchema = new Schema(
     vehicleModel: { type: String, required: true },
     manufacturingYear: { type: Number, required: true, min: 1886 },
     registrationPlate: { type: String, required: true, unique: true },
+    transactionId: { type: String, required: true },
+    paymentStatus: { type: String },
+    paymentConfirmationDate: { type: String },
   },
   { timestamps: true }
 );

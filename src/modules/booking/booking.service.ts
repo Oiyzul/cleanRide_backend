@@ -6,6 +6,7 @@ import { Slot } from "../slot/slot.model";
 import { User } from "../user/user.model";
 import { TBookingPayload } from "./booking.interface";
 import { Booking } from "./booking.model";
+import { initiatePayment } from "../payment/payment.utils";
 
 const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
   const {
@@ -61,6 +62,8 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
 
     await slot.save();
 
+    const transactionId = `TXN-${Date.now()}`;
+
     const modifiedPayload = {
       customer: customer?._id,
       service: serviceId,
@@ -70,17 +73,32 @@ const bookServiceIntoDB = async (payload: TBookingPayload, token: string) => {
       vehicleModel: vehicleModel,
       manufacturingYear: manufacturingYear,
       registrationPlate: registrationPlate,
+      transactionId,
     };
 
-    const result = (await Booking.create(modifiedPayload)).populate(
-      "customer service slot"
-    );
+    // const result = (await Booking.create(modifiedPayload)).populate(
+    //   "customer service slot"
+    // );
+    await Booking.create(modifiedPayload);
 
+    const paymentData = {
+      transactionId,
+      price: service?.price,
+      customerName: customer.name,
+      customerEmail: customer.email,
+      customerPhone: customer?.phone,
+      customerAddress: customer?.address,
+      startTime: slot?.startTime,
+      serviceName: service?.name
+    };
+
+    const paymentSession = await initiatePayment(paymentData);
+  
     await session.commitTransaction();
     await session.endSession();
 
-    return result;
-  } catch (err:any) {
+    return paymentSession;
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
