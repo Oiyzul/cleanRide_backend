@@ -1,60 +1,21 @@
-import Env from "../../config";
 import AppError from "../../errors/AppError";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
-import { isPasswordMatched } from "./user.utils";
-import jwt from "jsonwebtoken";
 
-const signupIntoDB = async (payload: TUser) => {
-  const user = await User.findOne({ email: payload?.email });
+const getAllUsersFromDB = async () => {
+  const users = await User.find({});
 
-  if (user) {
-    throw new AppError(400, "User already exists");
-  }
-
-  const result = await User.create(payload);
-
-  return result;
+  return users;
 };
 
-const loginIntoDB = async (payload: TUser) => {
-  const user = await User.findOne({ email: payload?.email }).select(
-    "+password"
-  );
+const getSingleUserFromDB = async (userId: string) => {
+  const user = await User.findById(userId);
 
   if (!user) {
     throw new AppError(400, "User not found");
   }
 
-  const passwordMatched = await isPasswordMatched(
-    payload.password,
-    user.password
-  );
-
-  if (!passwordMatched) {
-    throw new AppError(400, "Invalid password");
-  }
-
-  const jwtPayload = {
-    name: user.name,
-    email: user.email,
-    role: user.role,
-  };
-
-  const accessToken = jwt.sign(jwtPayload, Env.jwt_access_secret as string, {
-    expiresIn: Env.jwt_access_expires_in,
-  });
-
-  return {
-    accessToken,
-    user,
-  };
-};
-
-const getAllUsersFromDB = async () => {
-  const users = await User.find({});
-  
-  return users;
+  return user;
 };
 
 const updateUserIntoDB = async (id: string, userData: Partial<TUser>) => {
@@ -64,8 +25,7 @@ const updateUserIntoDB = async (id: string, userData: Partial<TUser>) => {
 };
 
 export const UserServices = {
-  signupIntoDB,
-  loginIntoDB,
   getAllUsersFromDB,
   updateUserIntoDB,
+  getSingleUserFromDB,
 };

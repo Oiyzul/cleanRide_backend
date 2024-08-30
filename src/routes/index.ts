@@ -5,12 +5,17 @@ import { UserRoutes } from "../modules/user/user.route";
 import { SlotRoutes } from "../modules/slot/slot.route";
 import { MyRoutes } from "../modules/me/me.route";
 import { PaymentRoutes } from "../modules/payment/payment.route";
+import { AuthRoutes } from "../modules/auth/auth.route";
 
 const router = Router();
 
 const moduleRoutes = [
   {
     path: "/auth",
+    route: AuthRoutes,
+  },
+  {
+    path: "/users",
     route: UserRoutes,
   },
   {

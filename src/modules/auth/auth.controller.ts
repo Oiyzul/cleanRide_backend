@@ -1,6 +1,27 @@
 import { catchAsync } from "../../utils/catchAsync";
 import sendRes from "../../utils/sendRes";
-import { UserServices } from "./user.service";
+import { UserServices } from "./auth.service";
+
+const signup = catchAsync(async (req, res) => {
+  const result = await UserServices.signupIntoDB(req.body);
+
+  sendRes({
+    res,
+    message: "User created successfully",
+    data: result,
+  });
+});
+
+const login = catchAsync(async (req, res) => {
+  const result = await UserServices.loginIntoDB(req.body);
+
+  sendRes({
+    res,
+    message: "User logged in successfully",
+    token: result?.accessToken,
+    data: result?.user,
+  });
+});
 
 const getAllUsers = catchAsync(async (req, res) => {
   const result = await UserServices.getAllUsersFromDB();
@@ -13,8 +34,8 @@ const getAllUsers = catchAsync(async (req, res) => {
 });
 
 const getSingleUser = catchAsync(async (req, res) => {
-  const { userId } = req.params;
-  const result = await UserServices.getSingleUserFromDB(userId as string);
+  const { email } = req.query;
+  const result = await UserServices.getSingleUserFromDB(email as string);
 
   sendRes({
     res,
@@ -35,6 +56,8 @@ const updateUser = catchAsync(async (req, res) => {
 });
 
 export const UserControllers = {
+  signup,
+  login,
   getAllUsers,
   updateUser,
   getSingleUser,
