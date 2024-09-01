@@ -42,7 +42,7 @@ const deleteServiceFromDB = (id) => __awaiter(void 0, void 0, void 0, function* 
     try {
         session.startTransaction();
         yield slot_model_1.Slot.deleteMany({ service: id });
-        const result = yield service_model_1.Service.findByIdAndDelete(id, { new: true });
+        const result = yield service_model_1.Service.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
         yield session.commitTransaction();
         yield session.endSession();
         return result;
@@ -56,6 +56,7 @@ const deleteServiceFromDB = (id) => __awaiter(void 0, void 0, void 0, function* 
 });
 const saveSlotIntoDB = (payload, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { service, startTime, endTime, date } = payload;
+    console.log(payload);
     const savedService = yield service_model_1.Service.findById(service);
     if (!savedService) {
         throw new AppError_1.default(400, "Service not found: " + service);

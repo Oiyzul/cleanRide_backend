@@ -16,5 +16,8 @@ const bookingSchema = new mongoose_1.Schema({
     vehicleModel: { type: String, required: true },
     manufacturingYear: { type: Number, required: true, min: 1886 },
     registrationPlate: { type: String, required: true, unique: true },
+    transactionId: { type: String, required: true },
+    paymentStatus: { type: String },
+    paymentConfirmationDate: { type: String },
 }, { timestamps: true });
 exports.Booking = (0, mongoose_1.model)("Booking", bookingSchema);

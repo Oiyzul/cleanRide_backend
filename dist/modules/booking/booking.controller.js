@@ -26,7 +26,7 @@ const bookService = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
-const getAllBookins = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllBookings = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield booking_service_1.BookingServices.getAllBookingsFromDB();
     (0, sendRes_1.default)({
         res,
@@ -34,7 +34,27 @@ const getAllBookins = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 
         data: result,
     });
 }));
+const getSingleUserBookings = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { customerId } = req.params;
+    const result = yield booking_service_1.BookingServices.getSingleUserBookingsFromDB(customerId);
+    (0, sendRes_1.default)({
+        res,
+        message: "All bookings retrieved successfully for this customer.",
+        data: result,
+    });
+}));
+const getSingleBooking = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { bookingId } = req.params;
+    const result = yield booking_service_1.BookingServices.getSingleBookingFromDB(bookingId);
+    (0, sendRes_1.default)({
+        res,
+        message: "Booking retrieved successfully.",
+        data: result,
+    });
+}));
 exports.BookingControllers = {
     bookService,
-    getAllBookins,
+    getAllBookings,
+    getSingleUserBookings,
+    getSingleBooking
 };

@@ -62,7 +62,7 @@ const deleteServiceFromDB = async (id: string) => {
 
 const saveSlotIntoDB = async (payload: TSlot, res: Response) => {
   const { service, startTime, endTime, date } = payload;
-
+  console.log(payload);
   const savedService = await Service.findById(service);
   if (!savedService) {
     throw new AppError(400, "Service not found: " + service);

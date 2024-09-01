@@ -11,6 +11,9 @@ const createServiceValidationSchema = zod_1.z.object({
     duration: zod_1.z
         .number()
         .positive({ message: "Duration must be a positive number" }),
+    imgUrl: zod_1.z
+        .string()
+        .min(10, { message: "Invalid imgUrl" }).optional(),
     isDeleted: zod_1.z.boolean().default(false),
 });
 exports.ServiceValidations = {

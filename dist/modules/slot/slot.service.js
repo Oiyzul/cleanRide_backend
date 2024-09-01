@@ -8,8 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SlotServices = void 0;
+const AppError_1 = __importDefault(require("../../errors/AppError"));
 const slot_model_1 = require("./slot.model");
 const getAvailableSlotsFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const { serviceId, date } = query;
@@ -23,6 +27,16 @@ const getAvailableSlotsFromDB = (query) => __awaiter(void 0, void 0, void 0, fun
     const result = yield slot_model_1.Slot.find(queryObject).populate("service");
     return result;
 });
+const updateSlotIntoDB = (id, slotData) => __awaiter(void 0, void 0, void 0, function* () {
+    const slot = yield slot_model_1.Slot.findById(id);
+    console.log(slotData);
+    if (!slot) {
+        throw new AppError_1.default(404, "Slot not found");
+    }
+    const updatedSlot = yield slot_model_1.Slot.findByIdAndUpdate(id, slotData, { new: true });
+    return updatedSlot;
+});
 exports.SlotServices = {
     getAvailableSlotsFromDB,
+    updateSlotIntoDB,
 };

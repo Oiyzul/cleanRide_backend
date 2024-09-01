@@ -13,41 +13,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
-const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const user_model_1 = require("./user.model");
-const user_utils_1 = require("./user.utils");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const signupIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email });
-    if (user) {
-        throw new AppError_1.default(400, "User already exists");
-    }
-    const result = yield user_model_1.User.create(payload);
-    return result;
+const getAllUsersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const users = yield user_model_1.User.find({});
+    return users;
 });
-const loginIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email: payload === null || payload === void 0 ? void 0 : payload.email }).select("+password");
+const getSingleUserFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findById(userId);
     if (!user) {
         throw new AppError_1.default(400, "User not found");
     }
-    const passwordMatched = yield (0, user_utils_1.isPasswordMatched)(payload.password, user.password);
-    if (!passwordMatched) {
-        throw new AppError_1.default(400, "Invalid password");
-    }
-    const jwtPayload = {
-        email: user.email,
-        role: user.role,
-    };
-    const accessToken = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.jwt_access_secret, {
-        expiresIn: config_1.default.jwt_access_expires_in,
-    });
-    return {
-        accessToken,
-        user,
-    };
+    return user;
+});
+const updateUserIntoDB = (id, userData) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findByIdAndUpdate(id, userData, { new: true });
+    console.log(user);
+    return user;
 });
 exports.UserServices = {
-    signupIntoDB,
-    loginIntoDB,
+    getAllUsersFromDB,
+    updateUserIntoDB,
+    getSingleUserFromDB,
 };

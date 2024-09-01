@@ -12,6 +12,6 @@ const sendRes = (resData) => {
     }
     const statusCode = isData ? 200 : 404;
     // console.log('from response', isData, "data", data);
-    return res.status(statusCode).json(Object.assign(Object.assign({ success: isData ? true : false, statusCode, message: isData ? message : "No data found" }, (resData.token && { toekn: resData.token })), (resData.data && { data: resData.data })));
+    return res.status(statusCode).json(Object.assign(Object.assign({ success: isData ? true : false, statusCode, message: isData ? message : "No data found" }, (resData.token && { token: resData.token })), (resData.data && { data: resData.data })));
 };
 exports.default = sendRes;

@@ -5,4 +5,5 @@ const express_1 = require("express");
 const slot_controller_1 = require("./slot.controller");
 const router = (0, express_1.Router)();
 router.get("/availability", slot_controller_1.SlotControllers.getAvailableSlots);
+router.put("/update-slot/:slotId", slot_controller_1.SlotControllers.updateSlot);
 exports.SlotRoutes = router;

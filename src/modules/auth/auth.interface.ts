@@ -1,5 +1,5 @@
 import { Model } from "mongoose";
-import { User_roles } from "./user.constant";
+import { User_roles } from "./auth.constant";
 
 export type TUser = {
   name: string;

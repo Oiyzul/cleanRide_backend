@@ -12,7 +12,11 @@ const Env = {
   payment_url: process.env.PAYMENT_URL,
   store_id: process.env.STORE_ID,
   signature_key: process.env.SIGNATURE_KEY,
-  payment_verification_url: process.env.PAYMENT_VERIFICATION_URL
+  payment_verification_url: process.env.PAYMENT_VERIFICATION_URL,
+  imagekit_urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT,
+  imagekit_privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
+  imagekit_publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
+  imagekit_folderId: process.env.IMAGEKIT_FOLDER_ID,
 };
 
 export default Env;

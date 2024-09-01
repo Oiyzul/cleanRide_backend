@@ -16,24 +16,34 @@ exports.UserControllers = void 0;
 const catchAsync_1 = require("../../utils/catchAsync");
 const sendRes_1 = __importDefault(require("../../utils/sendRes"));
 const user_service_1 = require("./user.service");
-const signup = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.signupIntoDB(req.body);
+const getAllUsers = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.UserServices.getAllUsersFromDB();
     (0, sendRes_1.default)({
         res,
-        message: "User created successfully",
+        message: "Users retrieved successfully",
         data: result,
     });
 }));
-const login = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserServices.loginIntoDB(req.body);
+const getSingleUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const result = yield user_service_1.UserServices.getSingleUserFromDB(userId);
     (0, sendRes_1.default)({
         res,
-        message: "User logged in successfully",
-        token: result === null || result === void 0 ? void 0 : result.accessToken,
-        data: result === null || result === void 0 ? void 0 : result.user,
+        message: "User retrieved successfully",
+        data: result,
+    });
+}));
+const updateUser = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const result = yield user_service_1.UserServices.updateUserIntoDB(userId, req.body);
+    (0, sendRes_1.default)({
+        res,
+        message: "Users updated successfully",
+        data: result,
     });
 }));
 exports.UserControllers = {
-    signup,
-    login,
+    getAllUsers,
+    updateUser,
+    getSingleUser,
 };

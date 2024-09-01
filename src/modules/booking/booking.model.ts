@@ -1,7 +1,8 @@
 import { model, Schema } from "mongoose";
 import { Vehicle_types } from "./booking.constant";
+import { TBooking } from "./booking.interface";
 
-const bookingSchema = new Schema(
+const bookingSchema = new Schema<TBooking>(
   {
     customer: { type: Schema.Types.ObjectId, ref: "User" },
     service: { type: Schema.Types.ObjectId, ref: "Service", required: true },

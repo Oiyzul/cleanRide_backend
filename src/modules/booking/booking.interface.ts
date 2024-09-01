@@ -10,6 +10,9 @@ export type TBooking = {
   vehicleModel: string;
   manufacturingYear: number;
   registrationPlate: string;
+  transactionId: string;
+  paymentStatus: string;
+  paymentConfirmationDate: string;
 };
 
 export type TBookingPayload = {
@@ -21,4 +24,4 @@ export type TBookingPayload = {
   vehicleModel: string;
   manufacturingYear: number;
   registrationPlate: string;
-}
+};

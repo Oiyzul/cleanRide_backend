@@ -30,7 +30,6 @@ const serviceSchema = new mongoose_1.default.Schema({
         type: String,
         required: true,
         trim: true,
-        unique: true,
     },
     description: {
         type: String,
@@ -45,6 +44,9 @@ const serviceSchema = new mongoose_1.default.Schema({
         type: Number,
         required: true,
         min: 1,
+    },
+    imgUrl: {
+        type: String
     },
     isDeleted: {
         type: Boolean,
