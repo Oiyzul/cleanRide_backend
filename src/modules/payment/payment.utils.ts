@@ -22,7 +22,7 @@ export const initiatePayment = async (paymentData: any) => {
       success_url: `https://carwash-backend-sepia.vercel.app/api/payment/confirmation?transactionId=${transactionId}&status=success`,
       // fail_url: `http://localhost:${Env.port}/api/payment/confirmation?status=fail`,
       fail_url: `https://carwash-backend-sepia.vercel.app/api/payment/confirmation?status=fail`,
-      cancel_url: "http://localhost:5173/services",
+      cancel_url: "https://carwash-frontend.netlify.app/",
       amount: price,
       currency: "BDT",
       desc: serviceName + " is booked at " + startTime,

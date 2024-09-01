@@ -8,19 +8,19 @@ const addReviewIntoDB = async (payload: TReview, token: string) => {
   const decodedToken = decodeJWT(token);
 
   const customer = await User.findOne({ email: decodedToken?.email });
-  
+
   if (!customer) {
     throw new AppError(400, "User not found");
   }
 
   const result = await Review.create(payload);
-  
+
   return result;
 };
 
 const getAllReviewsFromDB = async () => {
   const result = await Review.find().sort({ createdAt: -1 });
-  console.log(result)
+  
   return result;
 };
 
