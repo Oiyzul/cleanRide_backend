@@ -12,7 +12,7 @@ const config_1 = __importDefault(require("./config"));
 const imagekit_1 = __importDefault(require("imagekit"));
 const app = (0, express_1.default)();
 // Middleware to parse JSON request bodies
-app.use((0, cors_1.default)({ origin: ["http://localhost:5173", 'https://carwash-frontend.netlify.app'], credentials: true }));
+app.use((0, cors_1.default)({ origin: ["http://localhost:5173", 'https://cleanridebd.netlify.app'], credentials: true }));
 app.use(express_1.default.json());
 const imagekit = new imagekit_1.default({
     urlEndpoint: config_1.default.imagekit_urlEndpoint,

@@ -1,5 +1,4 @@
 import { catchAsync } from "../../utils/catchAsync";
-import sendRes from "../../utils/sendRes";
 import { PaymentServices } from "./payment.service";
 
 

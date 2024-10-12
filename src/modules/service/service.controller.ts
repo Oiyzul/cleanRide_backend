@@ -3,6 +3,7 @@ import sendRes from "../../utils/sendRes";
 import { ServiceServices } from "./service.service";
 
 const createService = catchAsync(async (req, res) => {
+  console.log(req.body)
   const result = await ServiceServices.saveServiceIntoDB(req.body);
 
   sendRes({

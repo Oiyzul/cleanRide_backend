@@ -8,8 +8,9 @@ import { generateSlots } from "./service.utils";
 import mongoose from "mongoose";
 
 const saveServiceIntoDB = async (payload: TService) => {
+  // console.log(payload)
   const result = await Service.create(payload);
-
+  console.log(result);
   return result;
 };
 

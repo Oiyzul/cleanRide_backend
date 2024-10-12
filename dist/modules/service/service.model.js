@@ -46,26 +46,28 @@ const serviceSchema = new mongoose_1.default.Schema({
         min: 1,
     },
     imgUrl: {
-        type: String
+        type: String,
     },
+    features: { type: [String], required: true },
+    unavailableFeatures: { type: [String] },
     isDeleted: {
         type: Boolean,
         default: false,
     },
 }, { timestamps: true });
-serviceSchema.pre('find', function (next) {
+serviceSchema.pre("find", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         this.find({ isDeleted: false });
         next();
     });
 });
-serviceSchema.pre('findOne', function (next) {
+serviceSchema.pre("findOne", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         this.find({ isDeleted: false });
         next();
     });
 });
-serviceSchema.pre('findOneAndUpdate', function (next) {
+serviceSchema.pre("findOneAndUpdate", function (next) {
     return __awaiter(this, void 0, void 0, function* () {
         this.find({ isDeleted: false });
         next();

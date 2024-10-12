@@ -12,7 +12,7 @@ export type TBooking = {
   registrationPlate: string;
   transactionId: string;
   paymentStatus: string;
-  paymentConfirmationDate: string;
+  paymentConfirmationDate?: string;
 };
 
 export type TBookingPayload = {

@@ -9,7 +9,12 @@ import ImageKit from "imagekit";
 const app = express();
 
 // Middleware to parse JSON request bodies
-app.use(cors({ origin: ["http://localhost:5173", 'https://carwash-frontend.netlify.app'], credentials: true }));
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://cleanridebd.netlify.app"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 const imagekit = new ImageKit({
@@ -36,8 +41,6 @@ app.get("/api/image-upload", function (req, res) {
   var result = imagekit.getAuthenticationParameters();
   res.send(result);
 });
-
-
 
 app.use(globalErrorHandler);
 

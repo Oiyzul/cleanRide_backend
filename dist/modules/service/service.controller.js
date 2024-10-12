@@ -17,6 +17,7 @@ const catchAsync_1 = require("../../utils/catchAsync");
 const sendRes_1 = __importDefault(require("../../utils/sendRes"));
 const service_service_1 = require("./service.service");
 const createService = (0, catchAsync_1.catchAsync)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(req.body);
     const result = yield service_service_1.ServiceServices.saveServiceIntoDB(req.body);
     (0, sendRes_1.default)({
         res,

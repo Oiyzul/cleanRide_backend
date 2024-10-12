@@ -19,7 +19,9 @@ const service_model_1 = require("./service.model");
 const service_utils_1 = require("./service.utils");
 const mongoose_1 = __importDefault(require("mongoose"));
 const saveServiceIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    // console.log(payload)
     const result = yield service_model_1.Service.create(payload);
+    console.log(result);
     return result;
 });
 const getSingleServiceFromDB = (payload, res) => __awaiter(void 0, void 0, void 0, function* () {

@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 import bcrypt from "bcryptjs"; // For password hashing
 import { User_roles } from "./user.constant";
 import Env from "../../config";

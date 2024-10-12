@@ -15,7 +15,20 @@ const signupIntoDB = async (payload: TUser) => {
 
   const result = await User.create(payload);
 
-  return result;
+  const jwtPayload = {
+    name: result.name,
+    email: result.email,
+    role: result.role,
+  };
+
+  const accessToken = jwt.sign(jwtPayload, Env.jwt_access_secret as string, {
+    expiresIn: Env.jwt_access_expires_in,
+  });
+
+  return {
+    accessToken,
+    result,
+  };
 };
 
 const loginIntoDB = async (payload: TUser) => {

@@ -17,6 +17,8 @@ const Env = {
   imagekit_privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
   imagekit_publicKey: process.env.IMAGEKIT_PUBLIC_KEY,
   imagekit_folderId: process.env.IMAGEKIT_FOLDER_ID,
+  base_url: process.env.BASE_URL,
+  cancel_url: process.env.CANCEL_URL
 };
 
 export default Env;
